@@ -28,8 +28,8 @@ Para ejecutar este proyecto localmente, sigue estos pasos:
 1.  **Clona el repositorio** (o descarga los archivos `app.py` y la carpeta `templates`):
 
     ```bash
-    git clone <url_del_repositorio> # Si tienes un repositorio Git
-    cd <nombre_de_tu_carpeta_proyecto>
+    git clone https://github.com/Luismartco/Cpm-RutaCritica 
+    cd Cpm-RutaCritica
     ```
 
 2.  **Crea un entorno virtual (opcional):**
