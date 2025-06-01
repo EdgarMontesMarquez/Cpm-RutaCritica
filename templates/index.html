@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CPM - Ruta Crítica</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #026836;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #63a608;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #ff7f3e;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        input[type=text] {
+            width: 90%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #63a608;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            margin-top: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #F39200;
+        }
+
+        .results {
+            background-color: white;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .creditos {
+            margin-top: 40px;
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+
+        .critical {
+            font-weight: bold;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Proyectos con cpm ruta crítica</h1>
+        <h3>Presentado por:</h3>
+        <p><strong>Luis Martines y Edgar Montes</strong></p>
+        <p><strong>Corporación Universitaria del Caribe - CECAR</strong></p>
+    </header>
+
+    <form method="POST">
+        <table id="activityTable">
+            <tr><th>Actividad</th><th>Precedentes</th><th>Duración</th></tr>
+            {% for i in range(num_rows) %}
+            <tr>
+                <td><input type="text" name="name" value="{{ names[i] if names|length > i else '' }}"></td>
+                <td><input type="text" name="precedence" value="{{ precedences[i] if precedences|length > i else '' }}"></td>
+                <td><input type="text" name="duration" value="{{ durations[i] if durations|length > i else '' }}"></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="button" onclick="addRow()">Agregar fila</button>
+        <button type="submit">Calcular CPM</button>
+    </form>
+
+    {% if activities %}
+    <div class="results">
+        <h2>Resultados</h2>
+        <table>
+            <tr><th>Actividad</th><th>Duración</th><th>TIP</th><th>TTT</th><th>Holgura</th></tr>
+            {% for a in activities %}
+            <tr>
+                <td>{{ a.name }}</td>
+                <td>{{ a.duration }}</td>
+                <td>{{ a.TIP }}</td>
+                <td>{{ a.TTT }}</td>
+                <td>{{ a.slack }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Ruta Crítica:</h3>
+        <p class="critical">{{ critical_path | join(' → ') }}</p>
+    </div>
+    {% endif %}
+
+    <div class="creditos">
+        Desarrollado por <strong>Luis Martines</strong> y <strong>Edgar Montes</strong><br>
+        © 2025 - CECAR
+    </div>
+
+    <script>
+        function addRow() {
+            const table = document.getElementById("activityTable");
+            const row = table.insertRow(-1);
+
+            row.innerHTML = `
+                <td><input type="text" name="name"></td>
+                <td><input type="text" name="precedence"></td>
+                <td><input type="text" name="duration"></td>
+            `;
+        }
+    </script>
+
+</body>
+</html>
+
