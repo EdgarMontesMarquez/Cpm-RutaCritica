@@ -35,7 +35,10 @@ def calculate_cpm(activities):
     for act in activities:
         act.slack = act.TTT - act.TIP
 
-    return activities, [a.name for a in activities if a.slack == 0]
+    critical_path = [a.name for a in activities if a.slack == 0]
+    project_duration = max_tip  # Esta es la duración total del proyecto
+
+    return activities, critical_path, project_duration
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -46,6 +49,8 @@ def index():
     names = request.form.getlist('name') if request.method == 'POST' else []
     durations = request.form.getlist('duration') if request.method == 'POST' else []
     precedences = request.form.getlist('precedence') if request.method == 'POST' else []
+    project_duration = 0
+
 
     if request.method == 'POST':
         for name, dur, prec in zip(names, durations, precedences):
@@ -56,7 +61,8 @@ def index():
                     continue
 
         if activities:
-            cpm, critical_path = calculate_cpm(activities)
+            cpm, critical_path, project_duration = calculate_cpm(activities)
+
 
     # Número de filas a mostrar siempre es igual al número de entradas ingresadas o al menos 3
     num_rows = max(len(names), 3)
@@ -68,7 +74,8 @@ def index():
         names=names,
         durations=durations,
         precedences=precedences,
-        num_rows=num_rows
+        num_rows=num_rows,
+        project_duration=project_duration
     )
 
 
