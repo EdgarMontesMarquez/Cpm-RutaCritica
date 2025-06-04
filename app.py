@@ -35,7 +35,9 @@ def calculate_cpm(activities):
     for act in activities:
         act.slack = act.TTT - act.TIP
 
-    return activities, [a.name for a in activities if a.slack == 0]
+    total_duration = max((a.TIP + a.duration) for a in activities)
+    return activities, [a.name for a in activities if a.slack == 0], total_duration
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -56,7 +58,8 @@ def index():
                     continue
 
         if activities:
-            cpm, critical_path = calculate_cpm(activities)
+            cpm, critical_path, total_duration = calculate_cpm(activities)
+
 
     # Número de filas a mostrar siempre es igual al número de entradas ingresadas o al menos 3
     num_rows = max(len(names), 3)
@@ -68,7 +71,8 @@ def index():
         names=names,
         durations=durations,
         precedences=precedences,
-        num_rows=num_rows
+        num_rows=num_rows,
+        total_duration=total_duration
     )
 
 
